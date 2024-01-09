@@ -42,7 +42,6 @@ Bash
 
 python expense_tracker.py
 
-Zachowaj ostrożność podczas korzystania z kodu. Więcej informacji
 
 The script will guide you through the process of adding, viewing, and analyzing your expenses.
 
