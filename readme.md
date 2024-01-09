@@ -33,7 +33,7 @@ Bash
 
 pip install pandas inquirer pickle sqlite3
 
-Zachowaj ostrożność podczas korzystania z kodu. Więcej informacji
+
 
 Usage:
 
