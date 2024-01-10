@@ -42,9 +42,26 @@ Bash
 
 python expense_tracker.py
 
-
 The script will guide you through the process of adding, viewing, and analyzing your expenses.
 
 Conclusion:
 
 This expense tracker is a valuable tool for managing everyday spending and gaining insights into financial habits. I hope it proves to be helpful for you as well.
+
+
+
+10.01 update:
+
+
+    Improved code readability and usability by adding comprehensive docstrings.
+    Streamlined the script structure for enhanced maintainability.
+    Removed unnecessary libraries (sqlite3, xlrd, Counter, argparse) to maintain a lightweight codebase.
+
+Additional improvements planned:
+
+    Implement robust error handling mechanisms using try-except blocks.
+    Utilize the raise function for better error management and clarity.
+    Format the self.time attribute using the parse() method to ensure consistent date representation.
+
+These enhancements will further strengthen the script's resilience and functionality, making it a more reliable and valuable tool for users.
+
