@@ -156,6 +156,22 @@ def save_file(filename: str, columns: List[str], values: List[List[str]], format
             df.to_excel(full_filename, index=False)
     print('File saved successfully.')
 
+def creating_chart(file):
+    """
+    This function is creating chart
+    """
+    df = pd.read_csv(file + '.csv')
+    grouped_data = df.groupby('tag')['cost'].sum()
+    plt.figure(figsize=(10, 5))
+    values = grouped_data.values
+    fig, ax = plt.subplots()
+    wedges, texts, autotexts = ax.pie(values, labels=grouped_data.index, autopct=lambda p : '{:.0f}'.format(p * sum(values)/100), startangle=90)
+
+    plt.axis('equal')
+    plt.title('Cost distribution per tag')
+    plt.show()
+    ### For tihs moment it only wokring with the csv file, I'm working now to made it possible with '.db' and '.xlsx' file.
+
 
 def file_open():
     """
@@ -257,6 +273,12 @@ def read():
         print(print_data_with_tags)
         total_cost = total_costs(opening_file)
         print(total_cost)
+
+
+@cli.command()
+def chart():
+    file = input('Enter file name: ')
+    interprepate_file = creating_chart(file)
 
 if __name__ == "__main__":
     cli()
