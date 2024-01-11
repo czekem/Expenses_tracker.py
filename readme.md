@@ -1,67 +1,84 @@
 Expense Tracker
 
-As an aspiring Junior Python Developer, I created this script to help manage and track my expenses. It allows me to add, view, and analyze my expenses in a simple and efficient manner.
+Description:
+
+A simple cost tracker application that allows you to add, read, and view costs. It also generates a chart showing the distribution of costs by tag.
 
 Features:
 
-    Add expenses: Easily add new expenses with a brief description, cost, date, and tag.
+    Add new costs
+    Read existing costs
+    View costs sorted by ID, description, cost, date, or tag
+    Filter costs by tag
+    Generate a chart showing the distribution of costs by tag
 
-    Save expenses: Save expenses to a CSV, Excel, or SQLite database for easy retrieval and analysis.
+Technologies:
 
-    View expenses: View all expenses in a clear and organized format, sorted by ID, date, or cost.
-
-    Analyze expenses by tag: Identify and analyze expenses based on their tags to gain insights into spending habits.
-
-    Total cost: Calculate the total cost of all expenses or by specific tags.
-
-Technologies Used:
-
-    Python: The primary programming language used to develop the script.
-
-    pandas: A data analysis library used to handle and manipulate data.
-
-    Inquirer: A user-friendly library for creating interactive prompts and collecting user input.
-
-    Pickle: A library used to save and load data structures, specifically the expense list.
-
-    sqlite3: A database library used to save expenses to a SQLite database.
+    Python
+    argparse
+    datetime
+    dataclasses
+    csv
+    pandas
+    pickle
+    matplotlib
 
 Installation:
 
-To install the required libraries, use the following command in your terminal:
-Bash
+Clone the repository and install the dependencies using pip:
 
-pip install pandas inquirer pickle sqlite3
-
-
+git clone https://github.com/bard/expens_track.py.git
+cd expens_track
+pip install -r requirements.txt
 
 Usage:
 
-Run the script using the following command:
-Bash
+To add new costs, use the write command:
 
-python expense_tracker.py
+python expens_track.py write
 
-The script will guide you through the process of adding, viewing, and analyzing your expenses.
+To read existing costs, use the read command:
 
-Conclusion:
+python expens_track.py read
 
-This expense tracker is a valuable tool for managing everyday spending and gaining insights into financial habits. I hope it proves to be helpful for you as well.
+To generate a chart, use the chart command:
 
+python expens_track.py chart
 
+Example:
 
-10.01 update:
+To add a new cost, you would first run the write command:
 
+python cost_tracker.py write
 
-    Improved code readability and usability by adding comprehensive docstrings.
-    Streamlined the script structure for enhanced maintainability.
-    Removed unnecessary libraries (sqlite3, xlrd, Counter, argparse) to maintain a lightweight codebase.
+Then, you would be prompted to enter the following information for each cost:
 
-Additional improvements planned:
+    Description
+    Cost
+    Date (YYYY-MM-DD)
+    Tag
 
-    Implement robust error handling mechanisms using try-except blocks.
-    Utilize the raise function for better error management and clarity.
-    Format the self.time attribute using the parse() method to ensure consistent date representation.
+For example:
 
-These enhancements will further strengthen the script's resilience and functionality, making it a more reliable and valuable tool for users.
+Description: Groceries
+Cost: 50.00
+Date: 2023-10-04
+Tag: Food
 
+To read the costs, you would run the read command:
+
+python expens_track.py read
+
+This will display a list of all costs, sorted by ID.
+
+To filter the costs by tag, you can specify the tag when running the read command:
+
+python expens_track.py read Food
+
+This will display a list of all costs with the tag "Food".
+
+To generate a chart, you would run the chart command:
+
+python expens_track.py chart
+
+This will create a pie chart showing the distribution of costs by tag.
