@@ -6,6 +6,9 @@ from dataclasses import dataclass
 from typing import List, Dict
 import click
 import inquirer
+import glob
+from datetime import datetime
+import matplotlib.pyplot as plt
 
 @dataclass
 class Cost:
@@ -75,8 +78,7 @@ def format_file():
        inquirer.List('format',
                      message="How do you want to save your file?",
                      choices=['csv', 'xlsx', 'db'],
-                     ),
-]
+                     ),]
     answers = inquirer.prompt(questions)
     return answers['format']
 
@@ -111,7 +113,7 @@ def save_db(cost_adding_list, format, filename):
                 question = input('Do you want to add data to the existing file? [y/n]: ').strip().lower()
                 if question == 'y':
                     full_filename = filename + '.' + format  # lub os.join(filename, format)
-                    with open(full_filename, '+xb') as stream:
+                    with open(full_filename, 'ab') as stream:
                         pickle.dump(cost_adding_list, stream)
                         print('The data for {full_filename} has been added.')
                 else:
@@ -122,6 +124,7 @@ def save_db(cost_adding_list, format, filename):
             with open(full_filename, 'wb') as stream:
                 pickle.dump(cost_adding_list, stream)
             print(f'File {full_filename} has been saved in database.')
+# plotly /// dash < - for pandasa power bi
 
 
 def save_file(filename: str, columns: List[str], values: List[List[str]], format: str) -> None: 
@@ -156,22 +159,6 @@ def save_file(filename: str, columns: List[str], values: List[List[str]], format
             df.to_excel(full_filename, index=False)
     print('File saved successfully.')
 
-def creating_chart(file):
-    """
-    This function is creating chart
-    """
-    df = pd.read_csv(file + '.csv')
-    grouped_data = df.groupby('tag')['cost'].sum()
-    plt.figure(figsize=(10, 5))
-    values = grouped_data.values
-    fig, ax = plt.subplots()
-    wedges, texts, autotexts = ax.pie(values, labels=grouped_data.index, autopct=lambda p : '{:.0f}'.format(p * sum(values)/100), startangle=90)
-
-    plt.axis('equal')
-    plt.title('Cost distribution per tag')
-    plt.show()
-    ### For tihs moment it only wokring with the csv file, I'm working now to made it possible with '.db' and '.xlsx' file.
-
 
 def file_open():
     """
@@ -193,6 +180,7 @@ def file_open():
         entries = [Cost(id =int(row['id']), description=row['description'], cost=float(row['cost']), time=str(row['time']), tag=row['tag']) for index, row in data.iterrows()]
         return entries
 
+
 def print_in_sorted_way(opening_file: List[Cost]):
     """
     This code is printing file data and values in sorted way
@@ -201,7 +189,7 @@ def print_in_sorted_way(opening_file: List[Cost]):
     for cost in opening_file:
         print(f'{cost.id} {cost.description} {cost.cost}, { cost.cost} {cost.time} {cost.tag } {cost.tag} {cost.big} ')  # te wyrażenie zwracało tuple tak lepiej  # # print(f'{cost.id} {cost.description} {cost.cost, '!!!'} {cost.time} {cost.tag}')
 
-    
+
 def tags_check(entries: List[Cost], tag_input: str) -> bool:
     """
     This function is checking for specyfic tag in file to group them
@@ -227,10 +215,40 @@ def whole_tags(entries: List[Cost],tag_input: str) -> Dict[str, float]:
 
 
 def total_costs(entries: List[Cost]) -> float:
+    """
+    This function is calculating total costs in the selected file
+    """
     total = 0
     for entry in entries:
         total += entry.cost
-    print(f"Total costs in column 'cost' is: ", round(total, 2))
+    print("Total costs in column 'cost' is: ", round(total, 2))
+
+
+def creating_chart(file):
+    """
+    This function is creating chart
+    """
+    filename, extension = file.rsplit('.', maxsplit=1)
+    if extension == 'csv':
+        df = pd.read_csv(file, encoding='utf-8')
+    elif extension == 'xlsx':
+        df = pd.read_excel(file)
+    elif extension == 'db':
+        df = pd.read_pickle(file)
+        df = pd.DataFrame(df)
+        
+    grouped_data = df.groupby('tag')['cost'].sum()
+    plt.figure(figsize=(10, 5))
+    values = grouped_data.values
+    fig, ax = plt.subplots()
+    wedges, texts, autotexts = ax.pie(values, labels=grouped_data.index, autopct=lambda p: '{:.0f}'.format(p * sum(values)/100), startangle=90)
+
+    plt.axis('equal')
+    plt.title('Cost distribution per tag')
+    plt.show()
+    # plt.pie(grouped_data, labels=grouped_data.index, autopct='%1.1f%%') here is '%' divide 
+    # plt.title('Cost distribution per tag')
+    # plt.show()
 
 
 @click.group()
@@ -263,6 +281,9 @@ def write():
 
 @cli.command()
 def read():
+    """
+    This function is allow user to read data from file
+    """
     if read:
         opening_file = file_open()
         print_in_adjecent_columns = print_in_sorted_way(opening_file)
@@ -274,11 +295,16 @@ def read():
         total_cost = total_costs(opening_file)
         print(total_cost)
 
-
+     
 @cli.command()
 def chart():
+    """
+    This function is creating chart
+    base on the name and data of the file
+    """
     file = input('Enter file name: ')
     interprepate_file = creating_chart(file)
+
 
 if __name__ == "__main__":
     cli()
