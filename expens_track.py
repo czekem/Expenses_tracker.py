@@ -1,13 +1,14 @@
 import os
+import glob
 import csv
 import pickle
-import pandas as pd
 from dataclasses import dataclass
 from typing import List, Dict
+from datetime import datetime
+
+import pandas as pd
 import click
 import inquirer
-import glob
-from datetime import datetime
 import matplotlib.pyplot as plt
 
 @dataclass
@@ -197,6 +198,7 @@ def tags_check(entries: List[Cost], tag_input: str) -> bool:
     for entry in entries:
         if tag_input in entry.tag:
             return True
+            
     return False
 
 
@@ -211,6 +213,7 @@ def whole_tags(entries: List[Cost],tag_input: str) -> Dict[str, float]:
             costs_by_tag[entry.tag] += entry.cost
         else:
             costs_by_tag[entry.tag] = entry.cost
+            
     return f' The total cost of {tag_input} is: {costs_by_tag[tag_input]}'  # costs_by_tag[tag_input] # if We delete {tag_input} it will show all costs and tags names
 
 
@@ -236,6 +239,7 @@ def creating_chart(file):
     elif extension == 'db':
         df = pd.read_pickle(file)
         df = pd.DataFrame(df)
+    # wrote line for case of user didn't choose the "right" extension.
         
     grouped_data = df.groupby('tag')['cost'].sum()
     plt.figure(figsize=(10, 5))
@@ -246,9 +250,7 @@ def creating_chart(file):
     plt.axis('equal')
     plt.title('Cost distribution per tag')
     plt.show()
-    # plt.pie(grouped_data, labels=grouped_data.index, autopct='%1.1f%%') here is '%' divide 
-    # plt.title('Cost distribution per tag')
-    # plt.show()
+
 
 
 @click.group()
@@ -274,19 +276,19 @@ def write():
     format = format_file()
     filename = create_filename()
     if format == 'db':
-        save_file_db = save_db(cost_adding_list, format, filename)
+        save_db(cost_adding_list, format, filename)
     else:
-        saving_the_cost_list = save_file(filename, ['id', 'description', 'cost', 'time', 'tag'], [id, description, cost, time, tag], format=format)
+        save_file(filename, ['id', 'description', 'cost', 'time', 'tag'], [id, description, cost, time, tag], format=format)
     
 
 @cli.command()
 def read():
     """
-    This function is allow user to read data from file
+    This function is allow user to read data from file ## co funkcja przyjmuje i zwraca
     """
     if read:
         opening_file = file_open()
-        print_in_adjecent_columns = print_in_sorted_way(opening_file)
+        print_in_sorted_way(opening_file)
         tag_input = input('Please enter tag that you want to check:\n').lower()
         checking_tags = tags_check(opening_file, tag_input)
         print(f'Tag "{tag_input}" exists: {checking_tags}')
@@ -303,8 +305,9 @@ def chart():
     base on the name and data of the file
     """
     file = input('Enter file name: ')
-    interprepate_file = creating_chart(file)
+    creating_chart(file)
 
 
 if __name__ == "__main__":
     cli()
+
