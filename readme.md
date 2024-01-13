@@ -32,7 +32,7 @@ Technology Stack:
 
 Installation:
 
-    Clone the repository using git: git clone https://github.com/bard/expens_track.py.git
+    Clone the repository using git: git clone https://github.com/czekem/expens_track.py.git
 
     Navigate into the project directory: cd expens_track
 
