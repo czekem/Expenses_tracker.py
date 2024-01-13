@@ -11,6 +11,7 @@ import click
 import inquirer
 import matplotlib.pyplot as plt
 
+
 @dataclass
 class Cost:
     """
@@ -35,6 +36,16 @@ class Cost:
             self.id = self.next_id
         if self.cost >= 1000:
             self.big = '!!!'
+        if self.description == '':
+            raise ValueError('Please enter the description')
+        elif self.cost <= 0:
+            raise ValueError('Please enter the cost')
+        elif self.time == '':
+            raise ValueError('Please enter the date')
+        elif self.tag == '':
+            raise ValueError('Please enter the tag')
+        elif self.cost != float(self.cost):
+            raise ValueError('Please enter the cost as a number')
 
     def __str__(self):
         return f'id: {self.id}, description: {self.description}, cost: {self.cost}, time: {self.time}, tag: {self.tag}, big: {self.big}'
@@ -67,6 +78,7 @@ def cost_add() -> List[Cost]:
         next_cost_value = input('Do you want to add another cost? (y/n): ').lower()
         if next_cost_value != 'y':
             break
+    
     return costs_list
 
 
@@ -81,6 +93,7 @@ def format_file():
                      choices=['csv', 'xlsx', 'db'],
                      ),]
     answers = inquirer.prompt(questions)
+    
     return answers['format']
 
 
@@ -100,6 +113,7 @@ def create_filename():
             file, extension = filename.rsplit('.', maxsplit=1)
             return file
         except ValueError:
+            
             return filename
 
 
@@ -125,7 +139,6 @@ def save_db(cost_adding_list, format, filename):
             with open(full_filename, 'wb') as stream:
                 pickle.dump(cost_adding_list, stream)
             print(f'File {full_filename} has been saved in database.')
-# plotly /// dash < - for pandasa power bi
 
 
 def save_file(filename: str, columns: List[str], values: List[List[str]], format: str) -> None: 
@@ -179,6 +192,7 @@ def file_open():
     elif extension == 'xlsx':
         data = pd.read_excel(filename, sheet_name='Sheet1')
         entries = [Cost(id =int(row['id']), description=row['description'], cost=float(row['cost']), time=str(row['time']), tag=row['tag']) for index, row in data.iterrows()]
+        
         return entries
 
 
@@ -190,7 +204,7 @@ def print_in_sorted_way(opening_file: List[Cost]):
     for cost in opening_file:
         print(f'{cost.id} {cost.description} {cost.cost}, { cost.cost} {cost.time} {cost.tag } {cost.tag} {cost.big} ')  # te wyrażenie zwracało tuple tak lepiej  # # print(f'{cost.id} {cost.description} {cost.cost, '!!!'} {cost.time} {cost.tag}')
 
-
+    
 def tags_check(entries: List[Cost], tag_input: str) -> bool:
     """
     This function is checking for specyfic tag in file to group them
@@ -198,7 +212,7 @@ def tags_check(entries: List[Cost], tag_input: str) -> bool:
     for entry in entries:
         if tag_input in entry.tag:
             return True
-            
+        
     return False
 
 
@@ -233,15 +247,12 @@ def creating_chart(file):
     """
     filename, extension = file.rsplit('.', maxsplit=1)
     if extension == 'csv':
-        df = pd.read_csv(file, encoding='utf-8')
+        df = pd.read_csv(file + '.csv')
     elif extension == 'xlsx':
         df = pd.read_excel(file)
     elif extension == 'db':
         df = pd.read_pickle(file)
         df = pd.DataFrame(df)
-    else:
-        print('You gave a wrong extension')
-    # wrote line for case of user didn't choose the "right" extension.
         
     grouped_data = df.groupby('tag')['cost'].sum()
     plt.figure(figsize=(10, 5))
@@ -252,7 +263,9 @@ def creating_chart(file):
     plt.axis('equal')
     plt.title('Cost distribution per tag')
     plt.show()
-
+    # plt.pie(grouped_data, labels=grouped_data.index, autopct='%1.1f%%') here is '%' divide 
+    # plt.title('Cost distribution per tag')
+    # plt.show()
 
 
 @click.group()
@@ -286,7 +299,7 @@ def write():
 @cli.command()
 def read():
     """
-    This function is allow user to read data from file ## co funkcja przyjmuje i zwraca
+    This function is allow user to read data from file
     """
     if read:
         opening_file = file_open()
@@ -298,8 +311,8 @@ def read():
         print(print_data_with_tags)
         total_cost = total_costs(opening_file)
         print(total_cost)
-
-     
+ 
+        
 @cli.command()
 def chart():
     """
