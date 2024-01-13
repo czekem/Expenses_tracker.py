@@ -239,6 +239,8 @@ def creating_chart(file):
     elif extension == 'db':
         df = pd.read_pickle(file)
         df = pd.DataFrame(df)
+    else:
+        print('You gave a wrong extension')
     # wrote line for case of user didn't choose the "right" extension.
         
     grouped_data = df.groupby('tag')['cost'].sum()
