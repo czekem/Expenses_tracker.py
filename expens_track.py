@@ -247,7 +247,7 @@ def creating_chart(file):
     """
     filename, extension = file.rsplit('.', maxsplit=1)
     if extension == 'csv':
-        df = pd.read_csv(file + '.csv')
+        df = pd.read_csv(filename + '.csv')
     elif extension == 'xlsx':
         df = pd.read_excel(file)
     elif extension == 'db':
