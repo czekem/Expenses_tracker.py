@@ -71,6 +71,6 @@ Error Handling:
 
     File Handling Errors: Robust file handling ensures data integrity, preventing issues with file operations.
 
-    Data Handling Exceptions: The code is equipped to handle exceptions that may arise during data processing and storage, maintaining stability and preventing data loss.
+    Data Handling Exceptions: Thanks to library inquirer, the script is more resistant to handle the possible user errors.
 
-We hope you enjoy using our expense tracker application to manage your finances effectively.
+I hope you enjoy using our expense tracker application to manage your finances effectively.
