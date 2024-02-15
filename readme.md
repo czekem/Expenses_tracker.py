@@ -73,4 +73,4 @@ Error Handling:
 
     Data Handling Exceptions: Thanks to library inquirer, the script is more resistant to handle the possible user errors.
 
-I hope you enjoy using our expense tracker application to manage your finances effectively.
+I hope you enjoy using expense tracker application to manage your finances effectively.
