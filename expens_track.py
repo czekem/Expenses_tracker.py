@@ -35,7 +35,7 @@ class Cost:
         if self.id is None:
             self.id = self.next_id
         if self.cost >= 1000:
-            self.big = '!!!'
+            self.big = '!!!'   ## make it other way, so the classess could be made.
         if self.description == '':
             raise ValueError('Please enter the description')
         elif self.cost <= 0:
