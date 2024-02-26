@@ -11,7 +11,7 @@ import click
 import inquirer
 import matplotlib.pyplot as plt
 
-
+## adds raise error to make it more safer from user mistake and more Pythonic
 @dataclass
 class Cost:
     """
